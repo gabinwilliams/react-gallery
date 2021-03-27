@@ -1,60 +1,57 @@
-import {useState, useEffect} from 'react';
-import './App.css';
-import axios from 'axios';
-import GalleryList from '../GalleryList/GalleryList';
-
-
+import { useState, useEffect } from "react";
+import "./App.css";
+import axios from "axios";
+import GalleryList from "../GalleryList/GalleryList";
 
 function App() {
+  const [galleryList, setGalleryList] = useState([]);
 
-const [galleryList, setGalleryList] = useState([]);
+  useEffect(() => {
+    getGalleryItems();
+  }, []);
 
-useEffect(() => {
-  getGalleryItems();
-}, []);
+  // GET REQUEST for GalleryList
+  const getGalleryItems = () => {
+    axios
+      .get("/gallery")
+      .then((response) => {
+        setGalleryList(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
- // GET REQUEST for GalleryList
-const getGalleryItems = () => {
-  axios
-    .get("/gallery")
-    .then((response) => {
-      setGalleryList(response.data);
-      console.log(response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+  const updateLikeCount = (event) => {
+    event.preventDefault();
 
-const updateLikeCount = (event) => {
+    let id = event.target.id;
 
-  event.preventDefault();
+    console.log("Adding 1 to count of this id:", id);
 
-  let id = event.target.id;
+    axios
+      .put(`/gallery/like/${id}`)
+      .then((response) => {
+        getGalleryItems();
+      })
+      .catch((err) => {
+        console.log("In PUT on client going to server", err);
+      });
+  };
 
-  console.log("Adding 1 to count of this id:", id);
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1 className="App-title">Gallery of My Life</h1>
+      </header>
 
-  axios
-    .put(`/gallery/like/${id}`)
-    .then((response) => {
-      getGalleryItems();
-    })
-    .catch((err) => {
-      console.log('In PUT on client going to server', err);
-    });
-
-}
-
-
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Gallery of My Life</h1>
-        </header>
-        <p>Gallery goes here</p>
-        < GalleryList galleryList={galleryList} updateLikeCount={updateLikeCount}/>
-      </div>
-    );
+      <GalleryList
+        galleryList={galleryList}
+        updateLikeCount={updateLikeCount}
+      />
+    </div>
+  );
 }
 
 export default App;

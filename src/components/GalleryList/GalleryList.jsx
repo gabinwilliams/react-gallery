@@ -1,37 +1,18 @@
-
-import '../App/App.css'
-import Card from "react-bootstrap/Card";
+import "../App/App.css";
 import CardColumns from "react-bootstrap/CardColumns";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import GalleryItem from '../GalleryItem/GalleryItem'
+import GalleryItem from "../GalleryItem/GalleryItem";
 
-export default function GalleryList(props) {
-
-  
-
-
-  
-
- 
-
-
+function GalleryList(props) {
   return (
     <>
-    
       <CardColumns>
-        {props.galleryList.map(item => (
-
-          < GalleryItem 
-          
-          item={item} 
-          updateLikeCount={props.updateLikeCount}
-          />
-
+        {props.galleryList.map((item) => (
+          <GalleryItem key={item.id} item={item} updateLikeCount={props.updateLikeCount} />
         ))}
-      
-     </CardColumns>
+      </CardColumns>
     </>
-    
   );
 }
+
+
+export default GalleryList;
