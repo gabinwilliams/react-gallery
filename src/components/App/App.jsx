@@ -26,6 +26,25 @@ const getGalleryItems = () => {
     });
 };
 
+const updateLikeCount = (event) => {
+
+  event.preventDefault();
+
+  let id = event.target.id;
+
+  console.log("Adding 1 to count of this id:", id);
+
+  axios
+    .put(`/gallery/like/${id}`)
+    .then((response) => {
+      getGalleryItems();
+    })
+    .catch((err) => {
+      console.log('In PUT on client going to server', err);
+    });
+
+}
+
 
     return (
       <div className="App">
@@ -33,7 +52,7 @@ const getGalleryItems = () => {
           <h1 className="App-title">Gallery of My Life</h1>
         </header>
         <p>Gallery goes here</p>
-        < GalleryList galleryList={galleryList}/>
+        < GalleryList galleryList={galleryList} updateLikeCount={updateLikeCount}/>
       </div>
     );
 }
